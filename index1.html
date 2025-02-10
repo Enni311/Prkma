@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Продажа карт Minecraft</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+            position: relative;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+        nav ul li {
+            position: relative;
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+        nav ul li ul {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #333;
+            padding: 10px 0;
+            list-style: none;
+            margin: 0;
+        }
+        nav ul li:hover ul {
+            display: block;
+        }
+        nav ul li ul li {
+            margin: 0;
+        }
+        nav ul li ul li a {
+            color: #fff;
+            padding: 10px 20px;
+            display: block;
+            text-decoration: none;
+        }
+        nav ul li ul li a:hover {
+            background-color: #444;
+        }
+        section {
+            padding: 20px;
+            margin: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #333;
+            color: #fff;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+        .form-container {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #333;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            width: 400px; /* Increased width */
+        }
+        .form-container input {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 4px;
+        }
+        .form-container input[type="submit"] {
+            background-color: #444;
+            color: #fff;
+            cursor: pointer;
+        }
+        .form-container input[type="submit"]:hover {
+            background-color: #555;
+        }
+        .form-container .close-btn {
+            background-color: #444;
+            color: #fff;
+            padding: 5px 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .form-container .close-btn:hover {
+            background-color: #555;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        .show {
+            display: block;
+        }
+        .product {
+            text-align: center;
+        }
+        .product img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .product button {
+            background-color: #444;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .product button:hover {
+            background-color: #555;
+        }
+        .username-display {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #fff;
+            font-weight: bold;
+        }
+        .logout-btn {
+            background-color: #444;
+            color: #fff;
+            padding: 5px 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            margin-left: 10px;
+        }
+        .logout-btn:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Продажа карт Minecraft</h1>
+        <nav>
+            <ul>
+                <li><a href="#home">Главная</a></li>
+                <li><a href="#" id="register-btn">Регистрация</a></li>
+                <li><a href="#" id="login-btn">Вход</a></li>
+                <li><a href="#" id="share-btn">Поделиться</a></li>
+            </ul>
+        </nav>
+        <div class="username-display" id="username-display"></div>
+        <button class="logout-btn" id="logout-btn" style="display: none;">Выйти</button>
+    </header>
+
+    <section id="home"></section>
+        <h2>Добро пожаловать на наш сайт!</h2>
+        <p>Здесь вы можете купить лучшие карты для Minecraft.</p>
+        <div class="product"></div>
+            <img src="https://minecraft-inside.ru/uploads/files/2025-01/678ff800a9041.png" alt="Christmas">
+            <p>Описание карты: Это удивительная карта для Minecraft, которая перенесет вас в мир приключений.</p>
+            <p>Цена: 0 рублей</p>
+            <button id="buy-btn">Купить</button>
+        </div>
+    </section>
+
+    <div class="overlay" id="overlay"></div>
+
+    <div class="form-container" id="register-form">
+        <button class="close-btn" id="close-register">&times;</button>
+        <form id="registerForm" action="/register" method="post" enctype="multipart/form-data">
+            <input type="text" id="username" name="username" placeholder="Имя пользователя" required>
+            <input type="password" id="password" name="password" placeholder="Пароль" required>
+            <input type="submit" value="Зарегистрироваться">
+        </form>
+    </div>
+
+    <div class="form-container" id="purchase-form">
+        <button class="close-btn" id="close-purchase">&times;</button>
+        <form id="purchaseForm" action="/purchase" method="post">
+            <input type="text" id="card-number" name="card-number" placeholder="Номер карты" required>
+            <input type="text" id="card-expiry" name="card-expiry" placeholder="Срок действия (MM/YY)" required>
+            <input type="text" id="card-cvc" name="card-cvc" placeholder="CVC" required>
+            <input type="submit" value="Оплатить">
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Продажа карт Minecraft. Все права защищены.</p>
+    </footer>
+
+    <script>
+        document.getElementById('register-btn').addEventListener('click', function() {
+            document.getElementById('overlay').classList.add('show');
+            document.getElementById('register-form').classList.add('show');
+        });
+
+        document.getElementById('close-register').addEventListener('click', function() {
+            document.getElementById('overlay').classList.remove('show');
+            document.getElementById('register-form').classList.remove('show');
+        });
+
+        document.getElementById('overlay').addEventListener('click', function() {
+            document.getElementById('overlay').classList.remove('show');
+            document.getElementById('register-form').classList.remove('show');
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+
+            if (username === '' || password === '') {
+                alert('Пожалуйста, заполните все поля.');
+                return;
+            }
+
+            // Simulate successful registration
+            document.getElementById('overlay').classList.remove('show');
+            document.getElementById('register-form').classList.remove('show');
+            document.getElementById('username-display').textContent = username;
+            document.getElementById('logout-btn').style.display = 'inline-block';
+        });
+
+        document.getElementById('logout-btn').addEventListener('click', function() {
+            document.getElementById('username-display').textContent = '';
+            document.getElementById('logout-btn').style.display = 'none';
+        });
+
+        document.getElementById('buy-btn').addEventListener('click', function() {
+            document.getElementById('overlay').classList.add('show');
+            document.getElementById('purchase-form').classList.add('show');
+        });
+
+        document.getElementById('close-purchase').addEventListener('click', function() {
+            document.getElementById('overlay').classList.remove('show');
+            document.getElementById('purchase-form').classList.remove('show');
+        });
+
+        document.getElementById('overlay').addEventListener('click', function() {
+            document.getElementById('overlay').classList.remove('show');
+            document.getElementById('purchase-form').classList.remove('show');
+        });
+
+        document.getElementById('purchaseForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var cardNumber = document.getElementById('card-number').value;
+            var cardExpiry = document.getElementById('card-expiry').value;
+            var cardCvc = document.getElementById('card-cvc').value;
+
+            if (cardNumber === '' || cardExpiry === '' || cardCvc === '') {
+                alert('Пожалуйста, заполните все поля.');
+                return;
+            }
+
+            // Simulate card validation and purchase
+            if (validateCard(cardNumber, cardExpiry, cardCvc)) {
+                alert('Покупка успешно завершена!');
+                document.getElementById('overlay').classList.remove('show');
+                document.getElementById('purchase-form').classList.remove('show');
+                // Simulate sending money to the card
+                sendMoneyToCard(cardNumber);
+            } else {
+                alert('Неверные данные карты. Пожалуйста, проверьте и попробуйте снова.');
+            }
+        });
+
+        function validateCard(number, expiry, cvc) {
+            // Simple validation for demonstration purposes
+            var cardNumberPattern = /^[0-9]{16}$/;
+            var cardExpiryPattern = /^(0[1-9]|1[0-2])\/?([0-9]{2})$/;
+            var cardCvcPattern = /^[0-9]{3,4}$/;
+
+            return cardNumberPattern.test(number) && cardExpiryPattern.test(expiry) && cardCvcPattern.test(cvc);
+        }
+
+        function sendMoneyToCard(cardNumber) {
+            // Simulate sending money to the card
+            console.log('Sending money to card: ' + cardNumber);
+            alert('Деньги успешно отправлены на карту: ' + cardNumber);
+        }
+
+        document.getElementById('share-btn').addEventListener('click', function() {
+            var shareUrl = window.location.href;
+            navigator.clipboard.writeText(shareUrl).then(function() {
+                alert('Ссылка скопирована в буфер обмена: ' + shareUrl);
+            }, function(err) {
+                alert('Не удалось скопировать ссылку: ', err);
+            });
+        });
+    </script>
+</body>
+</html>
